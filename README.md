@@ -63,3 +63,31 @@ The LEDs output fluctuates initially as the result is being calculated, but stay
 | D E F | **Destination Register** | A 3-bit field specifying one of the **8 registers** in the Register file. |
 | G H I | **Source Register** | A 3-bit field specifying one of the **8 registers** in the Register file. |
 | J K L M N | **Immediate** | A **5-bit signed** value. Used for Immediate Operations and Relative Branching. The value range is **-16 to +15**. |
+
+## Project Structure
+
+Below is the directory layout and description of the files included in this repository:
+
+```text
+├── CPU_Components/
+│   ├── alu.sv             # Arithmetic Logic Unit performing addition, subtraction, and multiplication extraction
+│   ├── alucodes.sv        # Macro definitions defining the 2-bit ALU function codes (func)
+│   ├── counter.sv         # Clock divider module creating a slow clock (~10Hz) from a fast clock
+│   ├── cpu.sv             # Top-level CPU core module integrating control path, data path, and ROMs
+│   ├── decoder.sv         # Instruction decoder generating control signals based on the 3-bit opcode
+│   ├── g_rom.sv           # ROM interface handling reads for the 5-point Gaussian kernel coefficients
+│   ├── kernel.hex         # Hexadecimal data file containing the coefficients for the Gaussian filter
+│   ├── opcodes.sv         # Macro definitions mapping instructions (ADD, ADDI, BNE, etc.) to 3-bit binary opcodes
+│   ├── pc.sv              # Program Counter module controlling linear execution or relative conditional branches
+│   ├── picoMIPS.sv        # Chip-level wrapper connecting the core CPU to physical FPGA switches and LEDs
+│   ├── picoMIPS4test.sv   # FPGA synthesis wrapper mapping a 50MHz onboard clock to the internal slow clock divider
+│   ├── prog.bin           # Binary file holding the compiled custom 14-bit machine instructions
+│   ├── prog.sv            # Instruction memory module implementing the SystemVerilog ROM initialized from prog.bin
+│   ├── regs.sv            # Register File containing 8 general-purpose registers, input ports, and the accumulator
+│   ├── signed_mult.sv     # Signed multiplier component wrapping onboard DSP blocks for convolving waveforms
+│   ├── tb_picoMIPS.sv     # Testbench containing simulation clock loops and terminal state-monitoring $display outputs
+│   ├── w_rom.sv           # ROM interface handling memory reads for the noisy input signal data
+│   └── wave.hex           # Hexadecimal dataset representing the 256 samples of the noisy input waveform
+├── Testbench/
+│   └── tb_picoMIPS.sv     # Independent simulation layout replica of the system testbench
+└── README.md              # Project overview, architectural documentation, and instruction set specifications
